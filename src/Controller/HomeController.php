@@ -12,10 +12,9 @@ class HomeController extends AbstractController {
      * @Route("/", name="accueil")
      */
     public function home(): Response {
-        $prenom = 'Jordan';
 
-        return $this->render('home.html.twig', [
-            'prenom' => strtoupper($prenom)
-        ]);
+        if ($this->isGranted('ROLE_ADMIN')) dd('Je suis admin !');
+
+        return $this->render('home.html.twig');
     }
 }
