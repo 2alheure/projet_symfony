@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+	{{titre}}
+	|
+	{{parent()}}
+{% endblock %}
+
+{% block css %}
+
+{% block body %}
+	<h1>{{titre}}</h1>
+
+	{% block form %}
+		{{ form(form) }}
+    {% endblock %}
+{% endblock %}
