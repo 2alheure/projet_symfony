@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use Exception;
 use App\Entity\Jeu;
 use App\Form\JeuType;
 use App\Repository\JeuRepository;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,13 +30,35 @@ class JeuxController extends AbstractController {
         $formulaire->handleRequest($request);
 
         if ($formulaire->isSubmitted() && $formulaire->isValid()) {
-            $jr->add($jeu);
-            return $this->redirectToRoute('app_jeux_liste');
-        } else {
-            return $this->render('jeux/formulaire.html.twig', [
-                'form' => $formulaire->createView(),
-            ]);
+            $image = $formulaire->get('image')->getData(); // $image = une instance de UploadedFile
+            $ok = true;
+
+            if ($image) {
+                $newName = 'jeu_' . uniqid() . '.' . $image->guessExtension(); // Je crée un nouveau nom
+
+                try {
+                    // Je déplace l'image vers sa nouvelle destination
+                    $image->move(
+                        $this->getParameter('imageDirectory'), // Le dossier de destination
+                        $newName // Le nom du fichier à sa nouvelle destination
+                    );
+
+                    $jeu->setImage($newName);
+                } catch (Exception $e) {
+                    $this->addFlash('errors', 'Un problème est survenu pendant l\'upload du fichier.');
+                    $ok = false;
+                }
+            }
+
+            if ($ok) {
+                $jr->add($jeu);
+                return $this->redirectToRoute('app_jeux_liste');
+            }
         }
+
+        return $this->render('jeux/formulaire.html.twig', [
+            'form' => $formulaire->createView(),
+        ]);
     }
 
     #[Route('/jeux/{id}', name: 'app_jeux_details')]
@@ -52,8 +76,31 @@ class JeuxController extends AbstractController {
     }
 
     #[Route('/jeux/{id}/delete', name: 'app_jeux_delete')]
-    public function delete(): Response {
-        // Delete
-        return new Response('delete');
+    public function delete(Jeu $id, JeuRepository $jr): Response {
+        $jr->remove($id);
+
+        /**
+         * Avec FileSystem
+         * (Attention : nécessite un composer require symfony/filesystem)
+         */
+        // $fs = new Filesystem;
+
+        // if (
+        //     !empty($id->getImage())
+        //     && $fs->exists($this->getParameter('imageDirectory') . '/' . $id->getImage()) // Test savoir si l'image existe
+        // )
+        //     $fs->remove($this->getParameter('imageDirectory') . '/' . $id->getImage()); // Suppression de l'image
+
+
+        /**
+         * En bon vieux PHP
+         */
+        if (
+            !empty($id->getImage())
+            && file_exists($this->getParameter('imageDirectory') . '/' . $id->getImage()) // Test savoir si l'image existe
+        )
+            unlink($this->getParameter('imageDirectory') . '/' . $id->getImage()); // Suppression de l'image
+
+        return $this->redirectToRoute('app_jeux_liste');
     }
 }

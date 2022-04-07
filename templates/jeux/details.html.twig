@@ -14,23 +14,33 @@
 <body>
     <h1>{{jeu.nom}}</h1>
 
+    <div class="row">
+        <div class="col-3">
+            <img src="{{ asset('images/' ~ jeu.image) }}" class="img-fluid">
+        </div>
 
-    <dl>
-        <dt>Nom</dt>
-        <dd>{{jeu.nom}}</dd>
+        <div class="col-9">
+            <dl>
+                <dt>Nom</dt>
+                <dd>{{jeu.nom}}</dd>
 
-        <dt>Année sortie</dt>
-        <dd>{{jeu.anneeSortie}}</dd>
+                <dt>Année sortie</dt>
+                <dd>{{jeu.anneeSortie}}</dd>
 
-        <dt>Prix sortie</dt>
-        <dd>{{jeu.prixSortie}}</dd>
+                <dt>Prix sortie</dt>
+                <dd>{{jeu.prixSortie}}</dd>
 
-        <dt>Editeur</dt>
-        <dd>{{jeu.editeur.nom}}</dd>
+                <dt>Editeur</dt>
+                <dd>{{jeu.editeur.nom}}</dd>
 
-        <dt>Pays éditeur</dt>
-        <dd>{{jeu.editeur.pays}}</dd>
-    </dl>
+                <dt>Pays éditeur</dt>
+                <dd>{{jeu.editeur.pays}}</dd>
+            </dl>
+        </div>
+    </div>
+    </div>
+
+
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

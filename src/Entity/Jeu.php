@@ -40,6 +40,9 @@ class Jeu {
     #[ORM\JoinColumn(nullable: false)]
     private $editeur;
 
+    #[ORM\Column(type: 'text', nullable: true)]
+    private $image;
+
     public function getId(): ?int {
         return $this->id;
     }
@@ -80,6 +83,18 @@ class Jeu {
 
     public function setEditeur(?Editeur $editeur): self {
         $this->editeur = $editeur;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }
