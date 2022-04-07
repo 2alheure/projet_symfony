@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\JeuRepository;
+use App\Validator\MultipleDe;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -33,6 +34,7 @@ class Jeu {
     #[ORM\Column(type: 'float')]
     /**
      * @Assert\Positive
+     * @MultipleDe(multiple = 2)
      */
     private $prixSortie;
 
@@ -87,13 +89,11 @@ class Jeu {
         return $this;
     }
 
-    public function getImage(): ?string
-    {
+    public function getImage(): ?string {
         return $this->image;
     }
 
-    public function setImage(?string $image): self
-    {
+    public function setImage(?string $image): self {
         $this->image = $image;
 
         return $this;

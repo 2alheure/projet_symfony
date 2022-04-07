@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Exception;
 use App\Entity\Jeu;
+use App\Service\Sum;
 use App\Form\JeuType;
 use App\Repository\JeuRepository;
 use Symfony\Component\Filesystem\Filesystem;
@@ -14,10 +15,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class JeuxController extends AbstractController {
     #[Route('/jeux', name: 'app_jeux_liste')]
-    public function liste(JeuRepository $jr): Response {
+    public function liste(JeuRepository $jr, Sum $sum): Response {
         // Retrieve all
         return $this->render('jeux/index.html.twig', [
             'jeux' => $jr->findAll(),
+            'somme' => $sum->faireLaSomme(4, 5, 3.141592, 6413524)
         ]);
     }
 
